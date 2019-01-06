@@ -1,7 +1,7 @@
 import os
-from typing import Set, List
+from typing import Set
 
-from sets import findsets, loadsets, CustomerReview
+from sets import findsets, loadsets
 from sets.reviews import ReviewSet
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
@@ -18,4 +18,4 @@ print("Loaded the following review sets : " + str(list(map(str, review_sets_load
 for review_set in review_sets_loaded:
     print("Set : " + review_set.marketplace())
     marketplace_name: str = review_set.marketplace()
-    marketplace_reviews: List[CustomerReview] = review_set.reviews
+    marketplace_reviews: list = review_set.reviews
