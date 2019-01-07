@@ -4,10 +4,9 @@ from typing import Set, List, Dict
 import sent_analysis
 import star_ratings
 from safetychecks import safety_check
-from sets import findsets, loadsets
+from sets import findsets, loadsets, azure_sentiment_analysis
 from sets.CustomerReview import CustomerReview
 from sets.reviews import ReviewSet
-from stats import country_star_stats
 from stats.country_star_stats import CountryStarStats
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
@@ -48,3 +47,5 @@ for country in cleaned_sets.keys():
     star_stats_per_country[country] = star_ratings.ratinglist(cleaned_set_country)
 
 print(star_stats_per_country["FR"].mean)
+
+azure_sentiment_analysis.analyze_reviews(cleaned_sets['FR'])
