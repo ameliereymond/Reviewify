@@ -46,3 +46,5 @@ for country in cleaned_sets.keys():
     cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
     print("Star ratings : " + country)
     star_stats_per_country[country] = star_ratings.ratinglist(cleaned_set_country)
+
+print(star_stats_per_country["FR"].mean)
