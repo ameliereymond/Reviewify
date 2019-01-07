@@ -8,8 +8,6 @@ def safety_check(reviews: List[CustomerReview]) -> List[CustomerReview]:
 
     # Correct timestamps
     for a_review in reviews:
-        if a_review.review_date < 0:
-            reviews.remove(a_review)
         if a_review.helpful_votes < 1:
             reviews.remove(a_review)
         if a_review.review_body is None or len(a_review.review_body) is 0:
