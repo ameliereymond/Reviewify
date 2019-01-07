@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Reviewify.iml" filepath="$PROJECT_DIR$/.idea/Reviewify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/azure-sent-analysis/azure-sent-analysis.iml" filepath="$PROJECT_DIR$/azure-sent-analysis/azure-sent-analysis.iml" />
     </modules>
   </component>
 </project>
