@@ -15,7 +15,7 @@ review_headline
 review_body
 review_date
 """
-import datetime
+from datetime import datetime
 
 
 class CustomerReview:
