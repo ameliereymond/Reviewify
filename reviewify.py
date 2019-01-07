@@ -2,10 +2,13 @@ import os
 from typing import Set, List, Dict
 
 import sent_analysis
+import star_ratings
 from safetychecks import safety_check
 from sets import findsets, loadsets
 from sets.CustomerReview import CustomerReview
 from sets.reviews import ReviewSet
+from stats import country_star_stats
+from stats.country_star_stats import CountryStarStats
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
 
@@ -37,3 +40,9 @@ for country in cleaned_sets.keys():
         compounds_per_country[country].append(score_rev)
 
 print(str(compounds_per_country))
+
+star_stats_per_country: Dict[str, CountryStarStats] = {}
+for country in cleaned_sets.keys():
+    cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
+    print("Star ratings : " + country)
+    star_stats_per_country[country] = star_ratings.ratinglist(cleaned_set_country)

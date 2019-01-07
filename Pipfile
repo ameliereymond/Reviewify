@@ -9,6 +9,7 @@ verify_ssl = true
 nltk = "==3.4"
 vadersentiment = "*"
 requests = "*"
+numpy = "==1.16.0rc2"
 
 [requires]
 python_version = "3.7"
