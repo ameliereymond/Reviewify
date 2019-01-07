@@ -20,11 +20,6 @@ class SentimentReqDocument:
         self.text = text
 
 
-class SentimentReqBody:
-    def __init__(self, elems: List[str]) -> None:
-        self.documents = elems
-
-
 class SentmentReqResponse:
     def __init__(self, score: float, docid: int) -> None:
         self.score = score
@@ -40,8 +35,7 @@ def build_req_for_reviews(language: str, reviews: List[CustomerReview]) -> List[
 
 def build_request_body(req_docs: List[SentimentReqDocument]) -> str:
     req_docs_json: List[str] = list(map(lambda elem: json.dumps(elem.__dict__), req_docs))
-    documents_body: SentimentReqBody = SentimentReqBody(req_docs_json)
-    return json.dumps(documents_body.__dict__)
+    return "{\"documents\": " + str(req_docs_json).replace("\'{", "{").replace("\'}", "}").replace("docid", "id") + "}"
 
 
 def send_request(body: str) -> Response:
