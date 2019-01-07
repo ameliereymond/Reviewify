@@ -3,7 +3,9 @@ from os import listdir
 from os.path import join
 from typing import List, Set
 
-DATASET_FOLDER = "data"
+DATASET_FOLDER = "data/samples"
+if "reviewify_full" in os.environ:
+    DATASET_FOLDER = "data"
 
 
 def find_sets_paths() -> Set[str]:
