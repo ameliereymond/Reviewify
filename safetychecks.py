@@ -17,4 +17,4 @@ def safety_check(reviews: List[CustomerReview]) -> List[CustomerReview]:
         else:
             seen_reviews.add(a_review.review_id)
 
-    return []
+    return reviews

@@ -1,6 +1,7 @@
 import os
 from typing import Set, List, Dict
 
+import sent_analysis
 from safetychecks import safety_check
 from sets import findsets, loadsets
 from sets.CustomerReview import CustomerReview
@@ -25,3 +26,14 @@ for review_set in review_sets_loaded:
     marketplace_reviews: List[CustomerReview] = review_set.reviews
     cleaned_sets[marketplace_name] = safety_check(marketplace_reviews)
 
+compounds_per_country: Dict[str, List[float]] = {}
+
+for country in cleaned_sets.keys():
+    compounds_per_country[country] = []
+    cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
+    print("Sentiment analysis : " + country)
+    for review in cleaned_set_country:
+        score_rev: float = sent_analysis.sentiment_analyzer_scores(review.review_body)
+        compounds_per_country[country].append(score_rev)
+
+print(str(compounds_per_country))
