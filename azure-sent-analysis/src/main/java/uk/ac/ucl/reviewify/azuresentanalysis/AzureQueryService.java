@@ -1,13 +1,13 @@
 package uk.ac.ucl.reviewify.azuresentanalysis;
 
 import java.net.URI;
-import java.net.http.HttpRequest;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import uk.ac.ucl.reviewify.azuresentanalysis.types.AzureApiWrapper;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.ReviewDocument;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.ReviewDocumentAnalysis;
 
 @Component
 public class AzureQueryService {
+
+    private static final ParameterizedTypeReference<Map<String, List<ReviewDocument>>> QUERY_TYPE = new ParameterizedTypeReference<>() {
+    };
+    private static final ParameterizedTypeReference<Map<String, List<ReviewDocumentAnalysis>>> REPLY_TYPE = new ParameterizedTypeReference<>() {
+    };
 
     private static final String BASE = "https://westeurope.api.cognitive.microsoft.com/text/analytics/v2.0";
     private static final String KEY = "6a486812184644159381c49b03c20e5c";
@@ -34,25 +38,26 @@ public class AzureQueryService {
         this.restTemplate = restTemplate;
     }
 
-    public AzureApiWrapper<ReviewDocumentAnalysis> queryAzureFor(List<ReviewDocument> documentsToReview) {
-        final AzureApiWrapper<ReviewDocument> body = new AzureApiWrapper<>(documentsToReview);
+    List<ReviewDocumentAnalysis> queryAzureFor(List<ReviewDocument> documentsToReview) {
+        final Map<String, List<ReviewDocument>> docs = new HashMap<>();
+        docs.put("documents", documentsToReview);
 
-        RequestEntity<AzureApiWrapper<ReviewDocument>> reqData = new RequestEntity<>(
-                body,
+        final RequestEntity<Map<String, List<ReviewDocument>>> requestData = new RequestEntity<>(
+                docs,
                 new LinkedMultiValueMap<>() {{
-                    put(KEY_HEADER, Collections.singletonList(KEY));
+                    put(KEY_HEADER, List.of(KEY));
                 }},
                 HttpMethod.POST,
                 URI.create(BASE + ENDPOINT),
-                new ParameterizedTypeReference<AzureApiWrapper<ReviewDocumentAnalysis>>() {}.getType()
+                QUERY_TYPE.getType()
         );
 
-        final ResponseEntity<AzureApiWrapper<ReviewDocumentAnalysis>> response = restTemplate.exchange(
-                reqData,
-                new ParameterizedTypeReference<>() {}
+        final ResponseEntity<Map<String, List<ReviewDocumentAnalysis>>> response = restTemplate.exchange(
+                requestData,
+                REPLY_TYPE
         );
 
-        return response.getBody();
+        return Objects.requireNonNull(response.getBody()).get("documents");
     }
 
 }

@@ -1,25 +1,19 @@
 package uk.ac.ucl.reviewify.azuresentanalysis.types;
 
-public final class ReviewDocument {
-    private final String language;
-    private final int id;
-    private final String text;
+import org.immutables.value.Value.Immutable;
 
-    public ReviewDocument(String language, int id, String text) {
-        this.language = language;
-        this.id = id;
-        this.text = text;
-    }
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-    public String getLanguage() {
-        return language;
-    }
+@Immutable
+@JsonSerialize(as = ImmutableReviewDocument.class)
+@JsonDeserialize(as = ImmutableReviewDocument.class)
+public interface ReviewDocument {
 
-    public int getId() {
-        return id;
-    }
+    String getLanguage();
 
-    public String getText() {
-        return text;
-    }
+    int getId();
+
+    String getText();
+
 }

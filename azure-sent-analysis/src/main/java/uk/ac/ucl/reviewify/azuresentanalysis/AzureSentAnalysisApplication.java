@@ -8,13 +8,21 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class AzureSentAnalysisApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AzureSentAnalysisApplication.class, args);
-	}
+    private final QueryInterceptor interceptor;
 
-	@Bean
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
+    public AzureSentAnalysisApplication(QueryInterceptor interceptor) {
+        this.interceptor = interceptor;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(AzureSentAnalysisApplication.class, args);
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        final RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getInterceptors().add(interceptor);
+        return restTemplate;
+    }
 
 }

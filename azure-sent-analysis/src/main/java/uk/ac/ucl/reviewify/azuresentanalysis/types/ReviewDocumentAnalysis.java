@@ -1,20 +1,17 @@
 package uk.ac.ucl.reviewify.azuresentanalysis.types;
 
-public final class ReviewDocumentAnalysis {
+import org.immutables.value.Value.Immutable;
 
-    private final double score;
-    private final int id;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-    public ReviewDocumentAnalysis(double score, int id) {
-        this.score = score;
-        this.id = id;
-    }
+@Immutable
+@JsonSerialize(as = ImmutableReviewDocumentAnalysis.class)
+@JsonDeserialize(as = ImmutableReviewDocumentAnalysis.class)
+public interface ReviewDocumentAnalysis {
 
-    public double getScore() {
-        return score;
-    }
+    double getScore();
 
-    public int getId() {
-        return id;
-    }
+    int getId();
+
 }
