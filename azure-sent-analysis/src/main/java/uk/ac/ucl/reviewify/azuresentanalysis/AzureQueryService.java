@@ -34,7 +34,7 @@ public class AzureQueryService {
     };
 
     private static final String BASE = "https://westeurope.api.cognitive.microsoft.com/text/analytics/v2.0";
-    private static final String KEY = "6a486812184644159381c49b03c20e5c";
+    private static final String KEY = "<PUT KEY HERE>";
     private static final String KEY_HEADER = "Ocp-Apim-Subscription-Key";
     private static final String ENDPOINT = "/sentiment";
 
