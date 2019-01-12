@@ -21,8 +21,21 @@ public class ReviewSetWriter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewSetWriter.class);
 
-    private static final String HEADER = "marketplace\tcustomer_id\treview_id\tproduct_id\tproduct_parent\tproduct_title\tproduct_category\tstar_rating"
-                                         + "\thelpful_votes\ttotal_votes\tverified_purchase\treview_headline\treview_body\treview_date\tsentiment_score\n";
+    private static final String HEADER = "marketplace\t"
+                                         + "customer_id\t"
+                                         + "review_id\t"
+                                         + "product_id\t"
+                                         + "product_parent\t"
+                                         + "product_title\t"
+                                         + "product_category\t"
+                                         + "star_rating\t"
+                                         + "helpful_votes\t"
+                                         + "total_votes\t"
+                                         + "verified_purchase\t"
+                                         + "review_headline\t"
+                                         + "review_body\t"
+                                         + "review_date\t"
+                                         + "sentiment_score\n";
 
     private final DatasetFolderService datasetFolderService;
 
