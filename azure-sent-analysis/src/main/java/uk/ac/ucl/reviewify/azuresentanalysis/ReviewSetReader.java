@@ -31,7 +31,7 @@ public class ReviewSetReader {
                     .totalVotes(lineArr[9])
                     .verifiedPurchase(lineArr[11])
                     .reviewHeadline(lineArr[12])
-                    .reviewBody(String.format("%.4000s", lineArr[13]))
+                    .reviewBody(String.format("%.4000s", lineArr[13]).replace("<br />", ". "))
                     .reviewDate(lineArr[14])
                     .build();
         }).collect(Collectors.toList());
