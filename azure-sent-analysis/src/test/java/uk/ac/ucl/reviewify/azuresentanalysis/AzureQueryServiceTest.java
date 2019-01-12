@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import uk.ac.ucl.reviewify.azuresentanalysis.types.ImmutableReviewDocument;
-import uk.ac.ucl.reviewify.azuresentanalysis.types.ReviewDocument;
-import uk.ac.ucl.reviewify.azuresentanalysis.types.ReviewDocumentAnalysis;
+import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.ImmutableUnreviewedDocument;
+import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.ReviewedDocument;
+import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.UnreviewedDocument;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -26,8 +26,8 @@ public class AzureQueryServiceTest {
 
     @Test
     public void queryAzureFor() {
-        ReviewDocument testDocument = ImmutableReviewDocument.builder().id(1).language("fr").text("C'est un test.").build();
-        final List<ReviewDocumentAnalysis> queryResult = queryService.queryAzureFor(Collections.singletonList(testDocument));
+        UnreviewedDocument testDocument = ImmutableUnreviewedDocument.builder().id(1).language("fr").text("C'est un test.").build();
+        final List<ReviewedDocument> queryResult = queryService.queryAzureFor(Collections.singletonList(testDocument));
         LOGGER.info("Result : {}", queryResult);
     }
 

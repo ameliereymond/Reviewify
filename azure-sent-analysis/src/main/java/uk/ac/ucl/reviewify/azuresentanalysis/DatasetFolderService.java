@@ -25,13 +25,10 @@ public class DatasetFolderService {
     }
 
     List<Path> findDatasets() throws IOException {
-        final String sentAnalysisFolderStr = environment.getProperty("azure_sent_analysis_folder");
-        final File sentAnalysisFolder = new File(Objects.requireNonNull(sentAnalysisFolderStr));
-        final File mainProjectFolder = new File(sentAnalysisFolder, "..");
-        final Path datasetsFolder = new File(mainProjectFolder, "data").toPath();
+        final Path datasetsFolder = getDatasetFolder();
 
-        try (DirectoryStream<Path> datasetFolder = newDirectoryStream(datasetsFolder)) {
-            final Spliterator<Path> childrenSpliterator = datasetFolder.spliterator();
+        try (DirectoryStream<Path> datasetFolderElementsStream = newDirectoryStream(datasetsFolder)) {
+            final Spliterator<Path> childrenSpliterator = datasetFolderElementsStream.spliterator();
             return StreamSupport
                     .stream(childrenSpliterator, false)
                     .map(Path::toFile)
@@ -40,6 +37,13 @@ public class DatasetFolderService {
                     .map(File::toPath)
                     .collect(Collectors.toList());
         }
+    }
+
+    Path getDatasetFolder() {
+        final String sentAnalysisFolderStr = environment.getProperty("azure_sent_analysis_folder");
+        final File sentAnalysisFolder = new File(Objects.requireNonNull(sentAnalysisFolderStr));
+        final File mainProjectFolder = new File(sentAnalysisFolder, "..");
+        return new File(mainProjectFolder, "data").toPath();
     }
 
 }

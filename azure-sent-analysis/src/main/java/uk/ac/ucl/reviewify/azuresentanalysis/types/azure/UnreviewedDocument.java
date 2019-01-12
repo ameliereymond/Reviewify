@@ -1,14 +1,15 @@
-package uk.ac.ucl.reviewify.azuresentanalysis.types;
+package uk.ac.ucl.reviewify.azuresentanalysis.types.azure;
 
 import org.immutables.value.Value.Immutable;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+
 @Immutable
-@JsonSerialize(as = ImmutableReviewDocument.class)
-@JsonDeserialize(as = ImmutableReviewDocument.class)
-public interface ReviewDocument {
+@JsonSerialize(as = ImmutableUnreviewedDocument.class)
+@JsonDeserialize(as = ImmutableUnreviewedDocument.class)
+public interface UnreviewedDocument {
 
     String getLanguage();
 
