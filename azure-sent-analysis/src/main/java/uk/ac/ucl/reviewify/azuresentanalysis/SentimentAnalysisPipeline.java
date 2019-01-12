@@ -17,9 +17,9 @@ import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.UnreviewedDocument;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.full.NonAnalyzedReview;
 
 @Component
-public class SentimentAnalysis {
+public class SentimentAnalysisPipeline {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SentimentAnalysis.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SentimentAnalysisPipeline.class);
 
     private static final Scanner INPUT_QUERY = new Scanner(System.in);
 
@@ -27,7 +27,7 @@ public class SentimentAnalysis {
     private final ReviewSetReader reviewSetReader;
     private final AzureQueryService azureQueryService;
 
-    public SentimentAnalysis(
+    public SentimentAnalysisPipeline(
             DatasetFolderService datasetFolderService,
             ReviewSetReader reviewSetReader,
             AzureQueryService azureQueryService

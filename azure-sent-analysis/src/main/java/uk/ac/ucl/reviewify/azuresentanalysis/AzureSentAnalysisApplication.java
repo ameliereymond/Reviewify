@@ -19,7 +19,7 @@ public class AzureSentAnalysisApplication {
 
     public static void main(String[] args) throws IOException {
         run(AzureSentAnalysisApplication.class, args)
-                .getBean(SentimentAnalysis.class)
+                .getBean(SentimentAnalysisPipeline.class)
                 .analyzeDatasets();
     }
 
