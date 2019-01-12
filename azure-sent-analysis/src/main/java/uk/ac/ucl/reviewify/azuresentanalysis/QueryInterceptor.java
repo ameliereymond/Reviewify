@@ -1,7 +1,5 @@
 package uk.ac.ucl.reviewify.azuresentanalysis;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -19,7 +17,7 @@ public class QueryInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        LOGGER.info("{Azure request} | {} {} ==> {}", request.getMethod(), request.getURI(), new String(body, UTF_8));
+        LOGGER.info("{Azure request} | {} {}", request.getMethod(), request.getURI());
         return execution.execute(request, body);
     }
 
