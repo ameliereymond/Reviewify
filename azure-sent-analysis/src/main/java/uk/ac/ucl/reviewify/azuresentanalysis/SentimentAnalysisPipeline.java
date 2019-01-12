@@ -15,6 +15,7 @@ import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.ImmutableUnreviewedDocu
 import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.ReviewedDocument;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.UnreviewedDocument;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.full.AnalyzedReview;
+import uk.ac.ucl.reviewify.azuresentanalysis.types.full.ImmutableAnalyzedReview;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.full.NonAnalyzedReview;
 
 @Component
@@ -112,7 +113,32 @@ public class SentimentAnalysisPipeline {
     }
 
     private List<AnalyzedReview> mergeWithAzure(final List<NonAnalyzedReview> originalDataset, List<ReviewedDocument> azureAnalyzedDocuments) {
+        if (!(azureAnalyzedDocuments.size() == originalDataset.size())) {
+            LOGGER.warn(
+                    "Disparity between original review count and Azure-analyzed ones! {} vs {}",
+                    originalDataset.size(),
+                    azureAnalyzedDocuments.size()
+            );
+        }
 
+        final List<AnalyzedReview> analyzedReviews = azureAnalyzedDocuments.stream().map(azureAnalyzed -> {
+            final NonAnalyzedReview mapping = originalDataset.get(azureAnalyzed.getId());
+            return ImmutableAnalyzedReview
+                    .builder()
+                    .from(mapping)
+                    .sentimentAnalysis(azureAnalyzed.getScore())
+                    .build();
+        }).collect(Collectors.toList());
+
+        if (!(analyzedReviews.size() == originalDataset.size())) {
+            LOGGER.warn(
+                    "Disparity between original review count and merge result with azure-analyzed ones! {} vs {}",
+                    originalDataset.size(),
+                    azureAnalyzedDocuments.size()
+            );
+        }
+
+        return analyzedReviews;
     }
 
 }
