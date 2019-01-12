@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,6 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.AzureError;
+import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.AzureReply;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.ReviewedDocument;
 import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.UnreviewedDocument;
 
@@ -30,8 +31,6 @@ public class AzureQueryService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AzureQueryService.class);
 
     private static final ParameterizedTypeReference<Map<String, List<UnreviewedDocument>>> QUERY_TYPE = new ParameterizedTypeReference<>() {
-    };
-    private static final ParameterizedTypeReference<Map<String, List<ReviewedDocument>>> REPLY_TYPE = new ParameterizedTypeReference<>() {
     };
 
     private static final String BASE = "https://westeurope.api.cognitive.microsoft.com/text/analytics/v2.0";
@@ -59,7 +58,9 @@ public class AzureQueryService {
         while (!remaining.isEmpty()) {
             final List<UnreviewedDocument> subset = new ArrayList<>(100);
             for (int i = 0; i < 100; i++) {
-                subset.add(remaining.remove(0));
+                if (!remaining.isEmpty()) {
+                    subset.add(remaining.remove(0));
+                }
             }
             azureInputs.add(subset);
         }
@@ -67,8 +68,9 @@ public class AzureQueryService {
         LOGGER.info("Will need {} queries to go through whole dataset.", azureInputs.size());
 
         final List<ReviewedDocument> analyzedDocuments = IntStream.range(0, azureInputs.size()).mapToObj(queryId -> {
-            LOGGER.info("\t -> Query {}/{}", queryId, azureInputs.size());
-            return queryPart(azureInputs.get(queryId));
+            final List<UnreviewedDocument> subsetToReview = azureInputs.get(queryId);
+            LOGGER.info("\t -> Query {}/{} for {} documents", queryId, azureInputs.size(), subsetToReview.size());
+            return queryPart(subsetToReview);
         }).flatMap(List::stream).collect(Collectors.toList());
 
         LOGGER.info("Done analyzing {} documents! Result size : {}", documentsToReview.size(), analyzedDocuments.size());
@@ -90,12 +92,20 @@ public class AzureQueryService {
                 QUERY_TYPE.getType()
         );
 
-        final ResponseEntity<Map<String, List<ReviewedDocument>>> response = restTemplate.exchange(
+        final ResponseEntity<AzureReply> response = restTemplate.exchange(
                 requestData,
-                REPLY_TYPE
+                AzureReply.class
         );
+        final AzureReply reply = response.getBody();
 
-        return Objects.requireNonNull(response.getBody()).get("documents");
+        assert reply != null;
+
+        reply.getErrors().ifPresent(errors -> LOGGER.warn(
+                "Errors during analysis! {}",
+                errors.stream().map(AzureError::getMessage).collect(Collectors.toSet())
+        ));
+
+        return reply.getDocuments();
     }
 
 }

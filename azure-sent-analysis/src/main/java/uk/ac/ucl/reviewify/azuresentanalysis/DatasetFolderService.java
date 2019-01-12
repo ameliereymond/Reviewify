@@ -34,6 +34,9 @@ public class DatasetFolderService {
                     .map(Path::toFile)
                     .filter(File::isFile)
                     .filter(file -> file.getName().endsWith(".tsv"))
+                    .filter(file -> !file.getName().toLowerCase().startsWith("jp"))
+                    .filter(file -> !file.getName().toLowerCase().startsWith("de"))
+                    .filter(file -> !file.getName().toLowerCase().startsWith("fr"))
                     .map(File::toPath)
                     .collect(Collectors.toList());
         }

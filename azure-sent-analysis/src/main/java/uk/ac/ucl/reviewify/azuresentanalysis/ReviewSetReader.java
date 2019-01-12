@@ -14,7 +14,7 @@ import uk.ac.ucl.reviewify.azuresentanalysis.types.full.NonAnalyzedReview;
 @Component
 public class ReviewSetReader {
 
-    public List<NonAnalyzedReview> readSet(final Path setPath) throws IOException {
+    List<NonAnalyzedReview> readSet(final Path setPath) throws IOException {
         return Files.lines(setPath).skip(1).map(line -> {
             final String[] lineArr = line.split("\t");
             return ImmutableNonAnalyzedReview
@@ -31,7 +31,7 @@ public class ReviewSetReader {
                     .totalVotes(lineArr[9])
                     .verifiedPurchase(lineArr[11])
                     .reviewHeadline(lineArr[12])
-                    .reviewBody(lineArr[13])
+                    .reviewBody(String.format("%.4000s", lineArr[13]))
                     .reviewDate(lineArr[14])
                     .build();
         }).collect(Collectors.toList());
