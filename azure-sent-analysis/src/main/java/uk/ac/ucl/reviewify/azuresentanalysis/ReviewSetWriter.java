@@ -43,7 +43,7 @@ public class ReviewSetWriter {
         this.datasetFolderService = datasetFolderService;
     }
 
-    void writeReviewSet(final String datasetFileName, List<AnalyzedReview> analyzedReviews) throws IOException {
+    Path writeReviewSet(final String datasetFileName, List<AnalyzedReview> analyzedReviews) throws IOException {
         final Path datasetFolder = datasetFolderService.getDatasetFolder();
         final Path outputFile = datasetFolder.resolve(datasetFileName);
         Files.deleteIfExists(outputFile);
@@ -57,7 +57,7 @@ public class ReviewSetWriter {
             }
         }
 
-        LOGGER.info("Wrote set to : {}", outputFile.toAbsolutePath().toString());
+        return outputFile;
     }
 
     private String tabifyReview(final AnalyzedReview review) {
