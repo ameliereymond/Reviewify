@@ -15,15 +15,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import uk.ac.ucl.reviewify.azuresentanalysis.types.ReviewDocument;
-import uk.ac.ucl.reviewify.azuresentanalysis.types.ReviewDocumentAnalysis;
+import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.ReviewedDocument;
+import uk.ac.ucl.reviewify.azuresentanalysis.types.azure.UnreviewedDocument;
 
 @Component
 public class AzureQueryService {
 
-    private static final ParameterizedTypeReference<Map<String, List<ReviewDocument>>> QUERY_TYPE = new ParameterizedTypeReference<>() {
+    private static final ParameterizedTypeReference<Map<String, List<UnreviewedDocument>>> QUERY_TYPE = new ParameterizedTypeReference<>() {
     };
-    private static final ParameterizedTypeReference<Map<String, List<ReviewDocumentAnalysis>>> REPLY_TYPE = new ParameterizedTypeReference<>() {
+    private static final ParameterizedTypeReference<Map<String, List<ReviewedDocument>>> REPLY_TYPE = new ParameterizedTypeReference<>() {
     };
 
     private static final String BASE = "https://westeurope.api.cognitive.microsoft.com/text/analytics/v2.0";
@@ -38,11 +38,11 @@ public class AzureQueryService {
         this.restTemplate = restTemplate;
     }
 
-    List<ReviewDocumentAnalysis> queryAzureFor(List<ReviewDocument> documentsToReview) {
-        final Map<String, List<ReviewDocument>> docs = new HashMap<>();
+    List<ReviewedDocument> queryAzureFor(List<UnreviewedDocument> documentsToReview) {
+        final Map<String, List<UnreviewedDocument>> docs = new HashMap<>();
         docs.put("documents", documentsToReview);
 
-        final RequestEntity<Map<String, List<ReviewDocument>>> requestData = new RequestEntity<>(
+        final RequestEntity<Map<String, List<UnreviewedDocument>>> requestData = new RequestEntity<>(
                 docs,
                 new LinkedMultiValueMap<>() {{
                     put(KEY_HEADER, List.of(KEY));
@@ -52,7 +52,7 @@ public class AzureQueryService {
                 QUERY_TYPE.getType()
         );
 
-        final ResponseEntity<Map<String, List<ReviewDocumentAnalysis>>> response = restTemplate.exchange(
+        final ResponseEntity<Map<String, List<ReviewedDocument>>> response = restTemplate.exchange(
                 requestData,
                 REPLY_TYPE
         );
