@@ -96,6 +96,11 @@ public class AzureQueryService {
                 requestData,
                 AzureReply.class
         );
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            final ResponseEntity<String> retryAsString = restTemplate.exchange(requestData, String.class);
+            LOGGER.error("Failure with : {}", retryAsString);
+        }
+
         final AzureReply reply = response.getBody();
 
         assert reply != null;
