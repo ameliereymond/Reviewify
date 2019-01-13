@@ -60,7 +60,6 @@ print(fr_star_stats)
 de_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["DE"])
 us_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["US"])
 uk_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["UK"])
-sentiment_stats_per_country: Dict[str, CountrySentimentStats] = {}
 
 sentiment_stats_per_country: Dict[str, CountrySentimentStats] = {}
 for country in cleaned_sets.keys():
