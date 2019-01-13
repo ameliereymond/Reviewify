@@ -77,4 +77,31 @@ for country in cleaned_sets.keys():
 mp.layered_histogram(star_values_per_country)
 mp.layered_histogram(sentiment_values_per_country)
 
+#Box plots for each star rating
+one_star = []
+for review in review_set_loaded:
+    if review.star_rating == 1:
+        one_star.append(review.star_rating)
+
+two_stars = []
+for review in review_set_loaded:
+    if review.star_rating == 2:
+        two_stars.append(review.star_rating)
+
+three_stars = []
+for review in review_set_loaded:
+    if review.star_rating == 3:
+        three_stars.append(review.star_rating)
+
+four_stars = []
+for review in review_set_loaded:
+    if review.star_rating == 4:
+        four_stars.append(review.star_rating)
+
+five_stars = []
+for review in review_set_loaded:
+    if review.star_rating == 5:
+        five_stars.append(review.star_rating)
+
+
 pyplot.show()
