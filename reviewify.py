@@ -1,16 +1,18 @@
 import os
 from typing import Set, List, Dict
 
+from matplotlib import pyplot
+
 import sent_analysis
 import star_ratings
-import matplotlib
 from safetychecks import safety_check
 from sets import findsets, loadsets
 from sets.CustomerReview import CustomerReview
 from sets.reviews import ReviewSet
 from stats import country_star_stats, country_sentiment
-from stats.country_star_stats import CountryStarStats
 from stats.country_sentiment import CountrySentimentStats
+from stats.country_star_stats import CountryStarStats
+from visualization import mp
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
 
@@ -64,3 +66,11 @@ sentiment_stats_per_country: Dict[str, CountrySentimentStats] = {}
 for country in cleaned_sets.keys():
     cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
     sentiment_stats_per_country[country] = country_sentiment.from_review_set(cleaned_set_country)
+
+star_values_per_country: Dict[str, List[int]] = {}
+for country in cleaned_sets.keys():
+    star_values_per_country[country] = list(map(lambda a_review: a_review.star_rating, cleaned_sets[country]))
+
+mp.layered_histogram(star_values_per_country, "Country", "Stars")
+
+pyplot.show()
