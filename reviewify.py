@@ -9,6 +9,9 @@ from sets.CustomerReview import CustomerReview
 from sets.reviews import ReviewSet
 from stats import country_star_stats
 from stats.country_star_stats import CountryStarStats
+from stats.country_sentiment import CountrySentimentStats
+
+
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
 
@@ -48,6 +51,18 @@ for country in cleaned_sets.keys():
     star_stats_per_country[country] = star_ratings.ratinglist(cleaned_set_country)
 
 print(star_stats_per_country["FR"].mean)
+print(star_stats_per_country["DE"].mean)
+print(star_stats_per_country["US"].mean)
+print(star_stats_per_country["UK"].mean)
 
 fr_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["FR"])
 print(fr_star_stats)
+de_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["DE"])
+us_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["US"])
+uk_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["UK"])
+sentiment_stats_per_country: Dict[str, CountrySentimentStats] = {}
+
+sentiment_stats_per_country: Dict[str, CountrySentimentStats] = {}
+for country in cleaned_sets.keys():
+    cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
+    sentiment_stats_per_country[country] = country_sentiment.from_review_set(cleaned_set_country)
