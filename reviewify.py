@@ -7,11 +7,9 @@ from safetychecks import safety_check
 from sets import findsets, loadsets
 from sets.CustomerReview import CustomerReview
 from sets.reviews import ReviewSet
-from stats import country_star_stats
+from stats import country_star_stats, country_sentiment
 from stats.country_star_stats import CountryStarStats
 from stats.country_sentiment import CountrySentimentStats
-
-
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
 
