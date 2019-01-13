@@ -17,9 +17,9 @@ class CountrySentimentStats:
 
 
 def from_review_set(country_review_set: List[CustomerReview]) -> CountrySentimentStats:
-    sentiment_values: List[int] = []
+    sentiment_values: List[float] = []
     for review in country_review_set:
-        sentiment_values.append(review.sentiment_value)
+        sentiment_values.append(review.sentiment_analysis_score)
     return CountrySentimentStats(
         float(np.mean(sentiment_values)),
         float(np.std(sentiment_values)),
