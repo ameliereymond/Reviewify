@@ -71,6 +71,6 @@ star_values_per_country: Dict[str, List[int]] = {}
 for country in cleaned_sets.keys():
     star_values_per_country[country] = list(map(lambda a_review: a_review.star_rating, cleaned_sets[country]))
 
-mp.layered_histogram(star_values_per_country, "Country", "Stars")
+mp.layered_histogram(star_values_per_country)
 
 pyplot.show()
