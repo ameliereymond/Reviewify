@@ -3,6 +3,7 @@ from typing import Set, List, Dict
 
 import sent_analysis
 import star_ratings
+import matplotlib
 from safetychecks import safety_check
 from sets import findsets, loadsets
 from sets.CustomerReview import CustomerReview
