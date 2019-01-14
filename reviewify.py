@@ -6,7 +6,8 @@ from sets import findsets, loadsets
 from sets.CustomerReview import CustomerReview
 from sets.reviews import ReviewSet
 from stats.stat import Statistics
-from visualization import star_values_per_country, sentiment_values_per_country, sentiment_score_per_stars, sentiment_per_helpfulness
+from visualization import star_values_per_country, sentiment_values_per_country, sentiment_score_per_stars, sentiment_per_helpfulness, \
+    helpful_votes_per_star_rating
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
 
@@ -82,3 +83,6 @@ sentiment_score_per_stars.plot(reviews_by_stars)
 
 print("\t-> Sentiment scores per helpful votes count")
 sentiment_per_helpfulness.plot(cleaned_sets, helpfulness_stats_per_country.values(), sentiment_stats_per_country.values())
+
+print("\t-> Sentiment scores per star rating")
+helpful_votes_per_star_rating.plot(cleaned_sets, helpfulness_stats_per_country.values())
