@@ -106,10 +106,17 @@ max_sent_score: int = sentiment_stats_across_all_countries.median + sentiment_st
 
 sentiment_scores: List[float] = []
 helpfulnesses: List[int] = []
+print("Plotting sentiment score over helpful votes count across all countries")
 for country in cleaned_sets.keys():
     for review in cleaned_sets[country]:
         if min_helpful_votes < review.helpful_votes < max_helpful_votes:
             helpfulnesses.append(review.helpful_votes)
         if min_sent_score < review.sentiment_analysis_score < max_sent_score:
             sentiment_scores.append(review.sentiment_analysis_score)
-mp.scatter_plot(helpfulnesses, sentiment_scores, "Sentiment scores by helpful votes (ignoring outliers)")
+mp.scatter_plot(
+    helpfulnesses,
+    sentiment_scores,
+    "Sentiment scores by helpful votes (within median ± 1 σ)",
+    "Helpful votes",
+    "Sentiment score"
+)
