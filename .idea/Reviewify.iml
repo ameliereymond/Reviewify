@@ -7,6 +7,9 @@
     <facet type="Python" name="Python">
       <configuration sdkName="Pipenv (Reviewify)" />
     </facet>
+    <facet type="Python" name="Python">
+      <configuration sdkName="Pipenv (Reviewify)" />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
