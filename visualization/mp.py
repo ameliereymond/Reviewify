@@ -4,13 +4,15 @@ import pandas
 from matplotlib import pyplot
 
 
-def boxplot(elements_names_to_list_of_values: Dict[str, List[float]], plot_name: str):
+def boxplot(elements_names_to_list_of_values: Dict[str, List[float]], plot_name: str, xlabel: str, ylabel: str):
     temp = {}
     for k in elements_names_to_list_of_values.keys():
         temp[k] = pandas.Series(elements_names_to_list_of_values[k])
     frame = pandas.DataFrame.from_dict(temp)
     frame.boxplot()
     pyplot.title(plot_name)
+    pyplot.xlabel(xlabel)
+    pyplot.ylabel(ylabel)
     pyplot.show()
 
 

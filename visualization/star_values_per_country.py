@@ -14,4 +14,4 @@ def plot(cleaned_sets: Dict[str, List[CustomerReview]]) -> None:
             lambda a_review: a_review.star_rating,
             cleaned_sets[country]
         ))
-    mp.boxplot(star_values_per_country, "Stars by country")
+    mp.boxplot(star_values_per_country, "Star rating per country", "Country", "Star rating")

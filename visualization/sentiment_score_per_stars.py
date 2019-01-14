@@ -12,4 +12,4 @@ def plot(reviews_by_stars: Dict[int, List[CustomerReview]]) -> None:
             lambda a_review: a_review.sentiment_analysis_score,
             reviews_by_stars[star_count]
         ))
-    mp.boxplot(sentiment_scores_per_stars, "Sentiment scores by stars")
+    mp.boxplot(sentiment_scores_per_stars, "Sentiment scores by star rating", "Star rating", "Sentiment score")
