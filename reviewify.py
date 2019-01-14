@@ -1,7 +1,6 @@
 import os
 from typing import Set, List, Dict
 
-import sent_analysis
 import star_ratings
 from safetychecks import safety_check
 from sets import findsets, loadsets
@@ -17,9 +16,12 @@ print("Starting Reviewify with working directory : " + str(os.path.realpath(".")
 review_sets_paths: Set[str] = findsets.find_sets_paths()
 print("Found the following review sets : " + str(review_sets_paths))
 
+min_set_len = min(list(map(lambda rs: loadsets.set_size(rs), review_sets_paths)))
+print("Shortest set has " + str(min_set_len) + " lines. Only getting that much from each.")
+
 review_sets_loaded: Set[ReviewSet] = set()
 for review_set_path in review_sets_paths:
-    review_set_loaded = loadsets.load_set(review_set_path)
+    review_set_loaded = loadsets.load_set(review_set_path, min_set_len)
     review_sets_loaded.add(review_set_loaded)
 print("Loaded the following review sets : " + str(list(map(str, review_sets_loaded))))
 
@@ -28,20 +30,11 @@ cleaned_sets: Dict[str, List[CustomerReview]] = {}
 for review_set in review_sets_loaded:
     print("Set : " + review_set.marketplace())
     marketplace_name: str = review_set.marketplace()
+    print("\t-> Marketplace : " + marketplace_name)
     marketplace_reviews: List[CustomerReview] = review_set.reviews
+    print("\t-> Review taken : " + str(len(marketplace_reviews)))
     cleaned_sets[marketplace_name] = safety_check(marketplace_reviews)
-
-compounds_per_country: Dict[str, List[float]] = {}
-
-for country in cleaned_sets.keys():
-    compounds_per_country[country] = []
-    cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
-    print("Sentiment analysis : " + country)
-    for review in cleaned_set_country:
-        score_rev: float = sent_analysis.sentiment_analyzer_scores(review.review_body)
-        compounds_per_country[country].append(score_rev)
-
-print(str(compounds_per_country))
+    print("\t-> Finished importing set " + marketplace_name)
 
 star_stats_per_country: Dict[str, CountryStarStats] = {}
 for country in cleaned_sets.keys():
@@ -49,10 +42,6 @@ for country in cleaned_sets.keys():
     print("Star ratings : " + country)
     star_stats_per_country[country] = star_ratings.ratinglist(cleaned_set_country)
 
-print(star_stats_per_country["FR"].mean)
-print(star_stats_per_country["DE"].mean)
-print(star_stats_per_country["US"].mean)
-print(star_stats_per_country["UK"].mean)
 
 fr_star_stats: CountryStarStats = country_star_stats.from_review_set(cleaned_sets["FR"])
 print(fr_star_stats)
