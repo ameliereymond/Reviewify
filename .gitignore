@@ -271,3 +271,4 @@ buildNumber.properties
 hs_err_pid*
 Pipfile.lock
 **/*.iml
+.idea/artifacts/
