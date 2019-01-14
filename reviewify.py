@@ -1,8 +1,6 @@
 import os
 from typing import Set, List, Dict
 
-from matplotlib import pyplot
-
 import sent_analysis
 import star_ratings
 from safetychecks import safety_check
@@ -73,35 +71,25 @@ for country in cleaned_sets.keys():
 
 sentiment_values_per_country: Dict[str, List[int]] = {}
 for country in cleaned_sets.keys():
-    sentiment_values_per_country[country] = list(map(lambda a_review: a_review.sentiment_analysis_score, cleaned_sets[country]))
-mp.layered_histogram(star_values_per_country)
-mp.layered_histogram(sentiment_values_per_country)
+    sentiment_values_per_country[country] = list(
+        map(lambda a_review: a_review.sentiment_analysis_score, cleaned_sets[country]))
+mp.layered_histogram(star_values_per_country, "Stars by country")
+mp.layered_histogram(sentiment_values_per_country, "Sentiment values per country")
 
-#Box plots for each star rating
-one_star = []
-for review in review_set_loaded:
-    if review.star_rating == 1:
-        one_star.append(review.star_rating)
+# Box plots for each star rating
+reviews_by_stars: Dict[int, List[CustomerReview]] = {}
+for country in cleaned_sets.keys():
+    for review in cleaned_sets[country]:
+        if review.star_rating not in reviews_by_stars.keys():
+            reviews_by_stars[review.star_rating] = []
+        reviews_by_stars[review.star_rating].append(review)
 
-two_stars = []
-for review in review_set_loaded:
-    if review.star_rating == 2:
-        two_stars.append(review.star_rating)
-
-three_stars = []
-for review in review_set_loaded:
-    if review.star_rating == 3:
-        three_stars.append(review.star_rating)
-
-four_stars = []
-for review in review_set_loaded:
-    if review.star_rating == 4:
-        four_stars.append(review.star_rating)
-
-five_stars = []
-for review in review_set_loaded:
-    if review.star_rating == 5:
-        five_stars.append(review.star_rating)
+sentiment_scores_per_stars: Dict[int, List[float]] = {}
+for star_count in reviews_by_stars.keys():
+    sentiment_scores_per_stars[star_count] = list(map(
+        lambda a_review: a_review.sentiment_analysis_score,
+        reviews_by_stars[star_count]
+    ))
 
 
-pyplot.show()
+mp.layered_histogram_int(sentiment_scores_per_stars, "Sentiment scores by stars")
