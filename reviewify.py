@@ -6,7 +6,7 @@ from sets import findsets, loadsets
 from sets.CustomerReview import CustomerReview
 from sets.reviews import ReviewSet
 from stats.stat import Statistics
-from visualization import mp
+from visualization import star_values_per_country, sentiment_values_per_country, sentiment_score_per_stars, sentiment_per_helpfulness
 
 print("Starting Reviewify with working directory : " + str(os.path.realpath(".")))
 
@@ -60,24 +60,6 @@ for country in cleaned_sets.keys():
     helpfulness_stats_per_country[country] = Statistics.from_review_set(cleaned_set_country, lambda a_review: a_review.helpful_votes)
     print("- " + country + " -> " + str(helpfulness_stats_per_country[country]))
 
-# Boxplot star values per country
-star_values_per_country: Dict[str, List[int]] = {}
-for country in cleaned_sets.keys():
-    star_values_per_country[country] = list(map(
-        lambda a_review: a_review.star_rating,
-        cleaned_sets[country]
-    ))
-mp.boxplot(star_values_per_country, "Stars by country")
-
-# Boxplot sentiment values per country
-sentiment_values_per_country: Dict[str, List[int]] = {}
-for country in cleaned_sets.keys():
-    sentiment_values_per_country[country] = list(map(
-        lambda a_review: a_review.sentiment_analysis_score,
-        cleaned_sets[country]
-    ))
-mp.boxplot(sentiment_values_per_country, "Sentiment values per country")
-
 # Get reviews classified by star values
 reviews_by_stars: Dict[int, List[CustomerReview]] = {}
 for country in cleaned_sets.keys():
@@ -86,37 +68,17 @@ for country in cleaned_sets.keys():
             reviews_by_stars[review.star_rating] = []
         reviews_by_stars[review.star_rating].append(review)
 
-# Boxplot sentiment score per stars
-sentiment_scores_per_stars: Dict[str, List[float]] = {}
-for star_count in reviews_by_stars.keys():
-    sentiment_scores_per_stars[str(star_count)] = list(map(
-        lambda a_review: a_review.sentiment_analysis_score,
-        reviews_by_stars[star_count]
-    ))
-mp.boxplot(sentiment_scores_per_stars, "Sentiment scores by stars")
+# Plot all visualizations
+print("Plots...")
 
-# Plot sentiment by helpfulness across all countries using stats to eliminate outliers
-sentiment_stats_across_all_countries: Statistics = Statistics.merge(sentiment_stats_per_country.values())
-helpfulness_stats_across_all_countries: Statistics = Statistics.merge(helpfulness_stats_per_country.values())
+print("\t-> Star values per country")
+star_values_per_country.plot(cleaned_sets)
 
-min_helpful_votes: int = helpfulness_stats_across_all_countries.median - helpfulness_stats_across_all_countries.std
-max_helpful_votes: int = helpfulness_stats_across_all_countries.median + helpfulness_stats_across_all_countries.std
-min_sent_score: int = sentiment_stats_across_all_countries.median - sentiment_stats_across_all_countries.std
-max_sent_score: int = sentiment_stats_across_all_countries.median + sentiment_stats_across_all_countries.std
+print("\t-> Sentiment values per country")
+sentiment_values_per_country.plot(cleaned_sets)
 
-sentiment_scores: List[float] = []
-helpfulnesses: List[int] = []
-print("Plotting sentiment score over helpful votes count across all countries")
-for country in cleaned_sets.keys():
-    for review in cleaned_sets[country]:
-        if min_helpful_votes < review.helpful_votes < max_helpful_votes:
-            helpfulnesses.append(review.helpful_votes)
-        if min_sent_score < review.sentiment_analysis_score < max_sent_score:
-            sentiment_scores.append(review.sentiment_analysis_score)
-mp.scatter_plot(
-    helpfulnesses,
-    sentiment_scores,
-    "Sentiment scores by helpful votes (within median ± 1 σ)",
-    "Helpful votes",
-    "Sentiment score"
-)
+print("\t-> Sentiment scores per star rating")
+sentiment_score_per_stars.plot(reviews_by_stars)
+
+print("\t-> Sentiment scores per helpful votes count")
+sentiment_per_helpfulness.plot(cleaned_sets, helpfulness_stats_per_country.values(), sentiment_stats_per_country.values())
