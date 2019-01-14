@@ -84,5 +84,5 @@ sentiment_score_per_stars.plot(reviews_by_stars)
 print("\t-> Sentiment scores per helpful votes count")
 sentiment_per_helpfulness.plot(cleaned_sets, helpfulness_stats_per_country.values(), sentiment_stats_per_country.values())
 
-print("\t-> Sentiment scores per star rating")
+print("\t-> Helpful votes count per star rating")
 helpful_votes_per_star_rating.plot(cleaned_sets, helpfulness_stats_per_country.values())
