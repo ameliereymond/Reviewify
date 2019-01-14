@@ -41,16 +41,19 @@ for review_set in review_sets_loaded:
 
 # Get stats of stars per country
 star_stats_per_country: Dict[str, CountryStarStats] = {}
+print("Star stats per country:")
 for country in cleaned_sets.keys():
     cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
-    print("Star ratings : " + country)
     star_stats_per_country[country] = star_ratings.ratinglist(cleaned_set_country)
+    print("- " + country + " -> " + str(star_stats_per_country[country]))
 
 # Get stats of sentiment per country
 sentiment_stats_per_country: Dict[str, CountrySentimentStats] = {}
+print("Sentiment stats per country:")
 for country in cleaned_sets.keys():
     cleaned_set_country: List[CustomerReview] = cleaned_sets[country]
     sentiment_stats_per_country[country] = country_sentiment.from_review_set(cleaned_set_country)
+    print("- " + country + " -> " + str(sentiment_stats_per_country[country]))
 
 # Boxplot star values per country
 star_values_per_country: Dict[str, List[int]] = {}
@@ -81,4 +84,3 @@ for star_count in reviews_by_stars.keys():
         reviews_by_stars[star_count]
     ))
 mp.boxplot_with_label(sentiment_scores_per_stars, "Sentiment scores by stars")
-
