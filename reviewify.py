@@ -58,15 +58,20 @@ for country in cleaned_sets.keys():
 # Boxplot star values per country
 star_values_per_country: Dict[str, List[int]] = {}
 for country in cleaned_sets.keys():
-    star_values_per_country[country] = list(map(lambda a_review: a_review.star_rating, cleaned_sets[country]))
-mp.boxplot_with_label(star_values_per_country, "Stars by country")
+    star_values_per_country[country] = list(map(
+        lambda a_review: a_review.star_rating,
+        cleaned_sets[country]
+    ))
+mp.boxplot(star_values_per_country, "Stars by country")
 
 # Boxplot sentiment values per country
 sentiment_values_per_country: Dict[str, List[int]] = {}
 for country in cleaned_sets.keys():
-    sentiment_values_per_country[country] = list(
-        map(lambda a_review: a_review.sentiment_analysis_score, cleaned_sets[country]))
-mp.boxplot_with_label(sentiment_values_per_country, "Sentiment values per country")
+    sentiment_values_per_country[country] = list(map(
+        lambda a_review: a_review.sentiment_analysis_score,
+        cleaned_sets[country]
+    ))
+mp.boxplot(sentiment_values_per_country, "Sentiment values per country")
 
 # Get reviews classified by star values
 reviews_by_stars: Dict[int, List[CustomerReview]] = {}
@@ -83,4 +88,4 @@ for star_count in reviews_by_stars.keys():
         lambda a_review: a_review.sentiment_analysis_score,
         reviews_by_stars[star_count]
     ))
-mp.boxplot_with_label(sentiment_scores_per_stars, "Sentiment scores by stars")
+mp.boxplot(sentiment_scores_per_stars, "Sentiment scores by stars")
