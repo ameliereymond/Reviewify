@@ -85,4 +85,9 @@ print("\t-> Sentiment scores per helpful votes count")
 sentiment_per_helpfulness.plot(cleaned_sets, helpfulness_stats_per_country.values(), sentiment_stats_per_country.values())
 
 print("\t-> Helpful votes count per star rating")
-helpful_votes_per_star_rating.plot(cleaned_sets, helpfulness_stats_per_country.values())
+print("\t-> Global")
+helpful_votes_per_star_rating.plot_multicountries(cleaned_sets, helpfulness_stats_per_country.values())
+
+for country in cleaned_sets.keys():
+    print("\t-> " + country)
+    helpful_votes_per_star_rating.plot_singlecountry(cleaned_sets[country], country)

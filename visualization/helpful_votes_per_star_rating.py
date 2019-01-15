@@ -6,7 +6,23 @@ from visualization import mp
 
 
 # Boxplot helpfulness by star rating
-def plot(
+
+
+def plot_singlecountry(country_set: List[CustomerReview], country_name: str):
+    helpfulnesses_per_star_rating: Dict[int, List[int]] = {}
+    for review in country_set:
+        if review.star_rating not in helpfulnesses_per_star_rating.keys():
+            helpfulnesses_per_star_rating[review.star_rating] = []
+        helpfulnesses_per_star_rating[review.star_rating].append(review.helpful_votes)
+    mp.boxplot(
+        helpfulnesses_per_star_rating,
+        "Helpful votes count per star rating for " + country_name,
+        "Star rating",
+        "Helpful votes"
+    )
+
+
+def plot_multicountries(
         cleaned_sets: Dict[str, List[CustomerReview]],
         helpfulness_stats: Iterable[Statistics]
 ) -> None:
