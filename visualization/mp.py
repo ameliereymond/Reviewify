@@ -11,7 +11,7 @@ def boxplot(elements_names_to_list_of_values: Dict[Any, List[float]], plot_name:
     for k in elements_names_to_list_of_values.keys():
         temp[k] = pandas.Series(elements_names_to_list_of_values[k])
     frame = pandas.DataFrame.from_dict(temp)
-    frame.boxplot()
+    frame.boxplot(grid=False, showfliers=False)
     pyplot.title(plot_name)
     pyplot.xlabel(xlabel)
     pyplot.ylabel(ylabel)
