@@ -5,7 +5,30 @@ from stats.stat import Statistics
 from visualization import mp
 
 
-def plot(
+def plot_country(
+        country_reviews: List[CustomerReview],
+        helpfulness_stats_country: Statistics,
+        country: str
+) -> None:
+    min_helpful_votes: int = helpfulness_stats_country.median - helpfulness_stats_country.std
+    max_helpful_votes: int = helpfulness_stats_country.median + helpfulness_stats_country.std
+
+    sentiment_scores: List[float] = []
+    helpfulnesses: List[int] = []
+    for review in country_reviews:
+        if min_helpful_votes < review.helpful_votes < max_helpful_votes:
+            helpfulnesses.append(review.helpful_votes)
+            sentiment_scores.append(review.sentiment_analysis_score)
+    mp.scatter_plot(
+        helpfulnesses,
+        sentiment_scores,
+        "Sentiment scores by helpful votes for " + country + " (within median ± 1 σ)",
+        "Helpful votes",
+        "Sentiment score"
+    )
+
+
+def plot_global(
         cleaned_sets: Dict[str, List[CustomerReview]],
         helpfulness_stats: Iterable[Statistics],
         sentiment_stats: Iterable[Statistics]

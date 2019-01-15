@@ -17,7 +17,7 @@ def boxplot(elements_names_to_list_of_values: Dict[Any, List[float]], plot_name:
 
 
 def scatter_plot(x_axis: List[float], y_axis: List[float], plot_name: str, xlabel: str, ylabel: str):
-    size_ideal: int = int(10_000_000 / (len(x_axis) * len(y_axis))) + 10
+    size_ideal: int = min(40, int(10_000_000 / (len(x_axis) * len(y_axis))) + 10)
     min_correl: int = min(len(x_axis), len(y_axis))
     x_clean: List[float] = x_axis[:min_correl]
     y_clean: List[float] = y_axis[:min_correl]
